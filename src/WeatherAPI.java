@@ -28,6 +28,7 @@ public class WeatherAPI {
                 Node child = children.item(y);
                 if (child.getNodeName().equals("temperature")) {
                     String temperature = child.getAttributes().getNamedItem("value").getNodeValue();
+                    System.out.println(timestamp + ": " + temperature);
                 }
             }
         }
