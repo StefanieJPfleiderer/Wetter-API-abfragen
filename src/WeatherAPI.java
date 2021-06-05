@@ -1,36 +1,22 @@
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import io.tutorial.weather.WeatherFetcher;
+import io.tutorial.weather.WeatherInfo;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.Scanner;
 
 public class WeatherAPI {
 
     public static void main(String[] args) throws Exception {
-        // URI contains personal key and is removed for security reasons
-        String uri = "";
+        WeatherFetcher weatherFetcher = WeatherFetcher.getInstance();
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Für welche Stadt soll das Wetter abgefragt werden?");
+        String city = scanner.nextLine();
 
-        Document document = documentBuilder.parse(uri);
-        NodeList times = document.getElementsByTagName("time");
+        WeatherInfo[] weatherInfos = weatherFetcher.fetch(city);
 
-        for (int x = 0; x < times.getLength(); x++) {
-            Node time = times.item(x);
-            NamedNodeMap timeAttributes = time.getAttributes();
-
-            String timestamp = timeAttributes.getNamedItem("from").getNodeValue();
-            NodeList children = time.getChildNodes();
-            for (int y = 0; y < children.getLength(); y++) {
-                Node child = children.item(y);
-                if (child.getNodeName().equals("temperature")) {
-                    String temperature = child.getAttributes().getNamedItem("value").getNodeValue();
-                    System.out.println(timestamp + ": " + temperature);
-                }
-            }
+        for (int x = 0; x < weatherInfos.length; x++) {
+            WeatherInfo weatherInfo = weatherInfos[x];
+            System.out.println(weatherInfo.getTimestamp() + ": " + weatherInfo.getTemperature());
         }
     }
 }
